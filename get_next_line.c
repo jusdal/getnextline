@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/04 18:29:44 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/04 20:03:31 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,23 @@ int	fn_checknl(char *str)
 	}
 	return (0);
 }
+
+char	*fn_findnl(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (&str[i]);
+		i++;
+	}
+	return (0);
+}
+
 
 size_t	ft_strlen(const char *s)
 {
@@ -102,14 +119,22 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
+/*void	keep(char *str, char *before, char *after, char c)
+{
+	while (str)
+	{
+		if (str++ 
+
+*/
+
 char	*get_next_line(int fd)
 {
 	static char	*stash;
 	char		*buf;
 	char		*line;
+	char		**splitholder;
 	int			nread;
 
-	stash = "\0";
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	nread = read(fd, buf, BUFFER_SIZE);
 	if (!buf || fd < 0)
@@ -118,19 +143,29 @@ char	*get_next_line(int fd)
 	{
 		if (!fn_checknl(buf))
 		{
-			printf("stash = %s\n", stash);
+			if (!stash)
+				stash = (char *)malloc(sizeof(char) * 1);
+				stash = "\0";
+			stash = (char *)malloc(sizeof(char) * (2 * BUFFER_SIZE + 1));
+			//printf("stash = %s\n", stash);
 			stash = ft_strjoin(stash, buf);
-			printf("stash = %s\n", stash);;
+			//printf("stash = %s\n", stash);;
 
 		}
 		else 
 		{
 			printf ("new line found\n"); //copy/join buf & stash
-			return (stash);
+			//line = ft_strjoin(stash, );
+			printf("stash before split = %s\n", stash);
+			free(stash);
+			stash = splitholder[1];
+			printf("stash after join = %s\n", stash);
+			return (line);
 		}
 		nread = read(fd, buf, BUFFER_SIZE);
 	}
-	return (line);
+	free(buf);
+	free(line);
 }
 
 int	main(void)
@@ -139,6 +174,7 @@ int	main(void)
 
 	fd = open("test.txt", O_RDONLY);
 	printf("fd = %d\n", fd);
-	printf("FINAL = %s", get_next_line(fd));
-
+	printf("FINAL = %s\n", get_next_line(fd));
+	printf("NEXTCALL = %s", get_next_line(fd));
+	printf("NEXTCALL = %s", get_next_line(fd));
 }
