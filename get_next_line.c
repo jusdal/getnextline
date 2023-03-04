@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/04 20:03:31 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/05 01:49:42 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,20 +30,16 @@ int	fn_checknl(char *str)
 	return (0);
 }
 
-char	*fn_findnl(char *str)
+int	fn_splitlength(char *str)
 {
 	int	i;
 
 	i = 0;
 	if (!str)
 		return (0);
-	while (str[i])
-	{
-		if (str[i] == '\n')
-			return (&str[i]);
+	while (str[i] != '\n')
 		i++;
-	}
-	return (0);
+	return (i);
 }
 
 
@@ -56,7 +52,7 @@ size_t	ft_strlen(const char *s)
 	{
 		i++;
 	}
-	return (i);
+	return (i + 1);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
@@ -132,40 +128,60 @@ char	*get_next_line(int fd)
 	static char	*stash;
 	char		*buf;
 	char		*line;
-	char		**splitholder;
-	int			nread;
+	int		splitlength;
+	int		i;
+	int		nread;
 
+	i = 0;
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	nread = read(fd, buf, BUFFER_SIZE);
-	if (!buf || fd < 0)
+	nread = read(fd, stash, BUFFER_SIZE);
+	if (!stash || fd < 0)
 		return (0);
 	while (nread != 0)
 	{
-		if (!fn_checknl(buf))
+		if (!fn_checknl(stash))
 		{
-			if (!stash)
-				stash = (char *)malloc(sizeof(char) * 1);
-				stash = "\0";
-			stash = (char *)malloc(sizeof(char) * (2 * BUFFER_SIZE + 1));
-			//printf("stash = %s\n", stash);
+			printf("stash = %s\n", stash);
 			stash = ft_strjoin(stash, buf);
-			//printf("stash = %s\n", stash);;
+			printf("stash = %s\n", stash);
 
 		}
 		else 
 		{
-			printf ("new line found\n"); //copy/join buf & stash
-			//line = ft_strjoin(stash, );
+			printf ("new line found\n");
+			/*splitlength = fn_splitlength(buf);
+			line = (char *)malloc(sizeof(char) * (ft_strlen(stash) + splitlength + 1));
+			ft_strcat(stash, buf, splitlength + 1);
+			line = stash + char before new line in buf
+			splitlength = fn_splitlength(buf) + 1;
+			line = (char *)malloc(sizeof(char) * (ft_strlen(stash) + splitlength + 1));
+			if (!line)
+				return (0);
+			while (i < splitlength)
+			{
+				line[ft_strlen(stash)] = buf[i];
+				i++;
+			}
+			line[ft_strlen(line)] = '\0';
+			printf("line = %s", line);
 			printf("stash before split = %s\n", stash);
-			free(stash);
-			stash = splitholder[1];
-			printf("stash after join = %s\n", stash);
+			//free(stash);
+			stash = (char *)malloc(sizeof(char) * (BUFFER_SIZE - splitlength) + 1);
+			while (i >= splitlength && i < BUFFER_SIZE)
+			{
+				stash[i] = buf[splitlength];
+				splitlength++;
+				i++;
+			}
+			stash[i] = '\0';
+			//stash = char after new line if buf
+			printf("stash after join = %s\n", stash);*/
 			return (line);
 		}
 		nread = read(fd, buf, BUFFER_SIZE);
 	}
-	free(buf);
-	free(line);
+	//free(buf);
+	//free(line);
 }
 
 int	main(void)
@@ -175,6 +191,6 @@ int	main(void)
 	fd = open("test.txt", O_RDONLY);
 	printf("fd = %d\n", fd);
 	printf("FINAL = %s\n", get_next_line(fd));
-	printf("NEXTCALL = %s", get_next_line(fd));
-	printf("NEXTCALL = %s", get_next_line(fd));
+	//printf("NEXTCALL = %s", get_next_line(fd));
+	//printf("NEXTCALL = %s", get_next_line(fd));
 }
