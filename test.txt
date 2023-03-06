@@ -1,3 +1,5 @@
-This is a sample file.
-It has three lines.
+This is
+ a sample file.
+I
+t has three lines.
 This is the third line.
