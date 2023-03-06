@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/06 17:39:34 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/06 21:01:58 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,15 +166,14 @@ char	*get_next_line(int fd)
 	char		*buf;
 	char		*line;
 	int		splitlength;
-	int		i;
+	//int		i;
 	int		nread;
 
-	i = 0;
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	nread = read(fd, buf, BUFFER_SIZE);
 	if (!buf || fd < 0)
 		return (0);
-	while (nread != 0)
+	while (nread != 0 && !(fn_checknl(stash)))
 	{
 		if (!fn_checknl(buf))
 		{
@@ -223,7 +222,7 @@ int	main(void)
 
 	fd = open("test.txt", O_RDONLY);
 	printf("fd = %d\n", fd);
-	printf("FINAL = %s\n", get_next_line(fd));
+	printf("FINAL = %s", get_next_line(fd));
 	printf("NEXTCALL = %s", get_next_line(fd));
 	printf("NEXTCALL = %s", get_next_line(fd));
 }
