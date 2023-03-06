@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/05 01:49:42 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/06 17:39:34 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	fn_splitlength(char *str)
 	return (i);
 }
 
-
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
@@ -52,7 +51,29 @@ size_t	ft_strlen(const char *s)
 	{
 		i++;
 	}
-	return (i + 1);
+	return (i);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*str;
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	len = 0;
+	while (s1[len] != '\0')
+		len++;
+	str = malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (0);
+	while (i < len)
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
@@ -115,13 +136,29 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-/*void	keep(char *str, char *before, char *after, char c)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	while (str)
-	{
-		if (str++ 
+	char			*str;
+	unsigned int	i;
 
-*/
+	i = 0;
+	if (!s)
+		return (0);
+	if (start > ft_strlen(s))
+		start = ft_strlen(s);
+	if (ft_strlen(&s[start]) <= len)
+		len = ft_strlen(&s[start]);
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (0);
+	while (s[i] && i < len)
+	{
+		str[i] = s[start + i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
 
 char	*get_next_line(int fd)
 {
@@ -134,54 +171,50 @@ char	*get_next_line(int fd)
 
 	i = 0;
 	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	nread = read(fd, stash, BUFFER_SIZE);
-	if (!stash || fd < 0)
+	nread = read(fd, buf, BUFFER_SIZE);
+	if (!buf || fd < 0)
 		return (0);
 	while (nread != 0)
 	{
-		if (!fn_checknl(stash))
+		if (!fn_checknl(buf))
 		{
-			printf("stash = %s\n", stash);
-			stash = ft_strjoin(stash, buf);
-			printf("stash = %s\n", stash);
+			if (!stash)
+			{
+				stash = ft_strdup(buf);
+				//printf("stash1 = %s\n", stash);
+			}
+			else
+			{
+				//printf("stash_before = %s\n", stash);
+				//printf("buf = %s\n", buf);
+				stash = ft_strjoin(stash, buf);
+				//printf("stash_after = %s\n", stash);
+			}
 
 		}
 		else 
 		{
-			printf ("new line found\n");
-			/*splitlength = fn_splitlength(buf);
-			line = (char *)malloc(sizeof(char) * (ft_strlen(stash) + splitlength + 1));
-			ft_strcat(stash, buf, splitlength + 1);
-			line = stash + char before new line in buf
+			//printf ("new line found\n");
 			splitlength = fn_splitlength(buf) + 1;
-			line = (char *)malloc(sizeof(char) * (ft_strlen(stash) + splitlength + 1));
-			if (!line)
+			//printf("splitlength = %d\n", splitlength);
+			//printf("buf = %s\n", buf);
+			if (!(line = (char *)malloc(sizeof(char) * (ft_strlen(stash) + splitlength + 1))))
 				return (0);
-			while (i < splitlength)
-			{
-				line[ft_strlen(stash)] = buf[i];
-				i++;
-			}
-			line[ft_strlen(line)] = '\0';
-			printf("line = %s", line);
-			printf("stash before split = %s\n", stash);
-			//free(stash);
+			line = stash;
+			ft_strlcat(line, buf, ft_strlen(stash) + splitlength + 1);
+			//printf("line = %s\n", line);
+			//printf("stash before split = %s\n", stash);
+			free(stash);
 			stash = (char *)malloc(sizeof(char) * (BUFFER_SIZE - splitlength) + 1);
-			while (i >= splitlength && i < BUFFER_SIZE)
-			{
-				stash[i] = buf[splitlength];
-				splitlength++;
-				i++;
-			}
-			stash[i] = '\0';
-			//stash = char after new line if buf
-			printf("stash after join = %s\n", stash);*/
+			stash = ft_substr(buf, splitlength, BUFFER_SIZE - splitlength + 1);
+			//printf("stash after join = %s\n", stash);
 			return (line);
 		}
 		nread = read(fd, buf, BUFFER_SIZE);
 	}
-	//free(buf);
-	//free(line);
+	free(buf);
+//	free(line);
+	return (0);
 }
 
 int	main(void)
@@ -191,6 +224,6 @@ int	main(void)
 	fd = open("test.txt", O_RDONLY);
 	printf("fd = %d\n", fd);
 	printf("FINAL = %s\n", get_next_line(fd));
-	//printf("NEXTCALL = %s", get_next_line(fd));
-	//printf("NEXTCALL = %s", get_next_line(fd));
+	printf("NEXTCALL = %s", get_next_line(fd));
+	printf("NEXTCALL = %s", get_next_line(fd));
 }
