@@ -6,14 +6,16 @@
 /*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:55:49 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/06 21:12:13 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/08 17:45:17 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+# define BUFFER_SIZE 5
 
 # include <unistd.h>
+# include <stddef.h>
 # include <stdlib.h>
 # include <fcntl.h>
 
