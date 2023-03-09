@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
+/*   By: jdaly <jdaly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/09 23:36:28 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/10 02:46:27 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char	*get_next_line(int fd)
 	static char	*stash;
 	char		*buf;
 	char		*line;
+	char		*temp;
 	int		splitlength;
 	//int		i;
 	int		nread;
@@ -76,8 +77,9 @@ char	*get_next_line(int fd)
 			else
 			{
 				//printf("stash_before = %s\n", stash);
-				//printf("buf = %s\n", buf);
-				stash = ft_strjoin(stash, buf);
+				temp = stash;
+				free(stash);
+				stash = ft_strjoin(temp, buf);
 				//printf("stash_after = %s\n", stash);
 			}
 		}
@@ -95,7 +97,6 @@ char	*get_next_line(int fd)
 			//printf("line = %s\n", line);
 			//printf("stash before split = %s\n", stash);
 			free(stash);
-			stash = (char *)malloc(sizeof(char) * (BUFFER_SIZE - splitlength) + 1);
 			stash = ft_substr(buf, splitlength, BUFFER_SIZE - splitlength + 1);
 			//printf("stash after join = %s\n", stash);
 			return (line);
