@@ -41,12 +41,6 @@ int	fn_getlength(char *str)
 	return (i);
 }
 
-/*void	fn_freestr(char *str)
-{
-	
-	free(str);
-	str = NULL;
-}*/
 char	*readfd(int fd, char *stash)
 {
 	char	*buf;
@@ -114,7 +108,7 @@ char	*get_next_line(int fd)
 	stash = readfd(fd, stash);
 	if (stash[0] == '\0') //condition if string is empty
 	{
-		free(stash);
+		free (stash);
 		return (0);
 	}
 	linelength = fn_getlength(stash) + 1;
