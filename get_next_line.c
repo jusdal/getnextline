@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/11 01:14:04 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/11 02:14:52 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,27 +88,10 @@ char	*keep(char *stash, int linelength)
 {
 	char	*temp;
 
-	if (stash[linelength] == '\0')
-	{
-		free(stash);
-		return (NULL);
-	}
-	if (!(temp = malloc(1)))
-	{
-		free(temp);
-		return (NULL);
-	}
-	temp[0] = '\0';
-	if (stash[linelength - 1] == '\n')
-	{
-		if (stash[linelength] == '\0')
-		{
-			free(stash);
-			return (NULL);
-		}
-		else
-			ft_strlcpy(temp, &stash[linelength], ft_strlen(stash) - linelength + 1);
-	}
+	temp = malloc(sizeof(char) * ft_strlen(&stash[linelength - 1]));
+	if (!temp)
+		return (0);
+	ft_strlcpy(temp, &stash[linelength], ft_strlen(&stash[linelength - 1]));
 	free(stash);
 	return (temp);
 }
@@ -130,7 +113,7 @@ char	*get_next_line(int fd)
 		stash[0] = '\0';
 	}
 	stash = readfd(fd, stash);
-	if (!stash)
+	if (!stash[0])
 	{
 		free(stash);
 		return (0);
