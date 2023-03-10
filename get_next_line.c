@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/10 20:57:34 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/10 22:15:02 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	fn_checknl(char *str)
 	return (0);
 }
 
-int	fn_splitlength(char *str)
+int	fn_getlength(char *str)
 {
 	int	i;
 
@@ -41,26 +41,95 @@ int	fn_splitlength(char *str)
 	return (i);
 }
 
-void	fn_freestr(char *str)
+/*void	fn_freestr(char *str)
 {
 	
 	free(str);
 	str = NULL;
+}*/
+char	*readfile(int fd, char *stash)
+{
+	char	*buf;
+	int		nread;
+
+	if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+		return (0);
+	nread = 1;
+	while (nread > 0)
+	{
+		nread = read(fd, buf, BUFFER_SIZE);
+		if (nread < 0)
+		{
+			free(buf);
+			return (0);
+		}
+		buf[nread] = '\0';
+		stash = ft_strjoin(stash, buf);
+		if (fn_checknl(buf))
+			break;
+	}
+	free(buf);
+	return(stash);
+}
+
+char	*createline(char *stash, int linelength)
+{
+	char	*line;
+
+	if (stash == NULL)
+		return (0);
+	if (!(line = malloc(sizeof(char) * (fn_getlength(stash) + 1))))
+		return (0);
+	ft_strlcpy(line, stash, linelength);
+		return (line);
+}
+
+char	*keep(char *stash, int linelength)
+{
+	char	*temp;
+
+	if (stash[linelength + 1] = '\0')
+	{
+		free(stash);
+		return (0);
+	}
+	if (!(temp = malloc(1)))
+		return (0);
+	temp[0] = '\0';
+	ft_strlcpy(temp, &stash[linelength], ft_strlen(stash - linelength));
+	free(stash);
+	return (temp);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*stash = NULL;
-	char		*buf;
+	static char	*stash;
+	//char		*buf;
 	char		*line;
-	char		*temp;
-	int		splitlength;
-	//int		i;
-	int		nread;
+	//char		*temp;
+	int			linelength;
+	//int			nread;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
-	if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+	if (!stash)
+	{
+		stash = malloc(1);
+		stash[0] = '\0';
+	}
+	stash = readfile(fd, stash);
+	if (!stash[0])
+	{
+		free(stash);
+		return (0);
+	}
+	linelength = fn_getlength(stash) + 1;
+	line = createline(stash, linelength);
+	stash = keep(stash, linelength);
+	return (line);
+}
+	
+	/*if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
 		return (0);
 	nread = 1;
 	while (nread > 0)
@@ -97,7 +166,7 @@ char	*get_next_line(int fd)
 //	free(line);
 	return (0);
 }
-
+*/
 int	main(void)
 {
 	int     fd;
