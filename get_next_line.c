@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/10 02:46:27 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/10 20:57:34 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,21 @@ int	fn_splitlength(char *str)
 	i = 0;
 	if (!str)
 		return (0);
-	while (str[i] != '\n')
+	while (str[i] != '\n' && str[i] != '\0')
 		i++;
 	return (i);
 }
 
+void	fn_freestr(char *str)
+{
+	
+	free(str);
+	str = NULL;
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash = NULL;
 	char		*buf;
 	char		*line;
 	char		*temp;
@@ -51,58 +58,42 @@ char	*get_next_line(int fd)
 	//int		i;
 	int		nread;
 
-	splitlength = 0;
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
 	if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
 		return (0);
-
 	nread = 1;
 	while (nread > 0)
 	{
 		nread = read(fd, buf, BUFFER_SIZE);
 		buf[nread] = '\0';
-		if (!fn_checknl(buf) && !(fn_checknl(stash)))
+		if (nread == -1)
+			fn_freestr(buf);
+		if (!stash)
+			stash = ft_strdup("");
+		if (fn_checknl(stash))
 		{
-			if (nread == -1)
-			{
-				free(buf);
-				return (0);
-			}
-			if (!stash)
-			{
-				stash = ft_strdup(buf);
-				//printf("stash1 = %s\n", stash);
-			}
-			else
-			{
-				//printf("stash_before = %s\n", stash);
-				temp = stash;
-				free(stash);
-				stash = ft_strjoin(temp, buf);
-				//printf("stash_after = %s\n", stash);
-			}
-		}
-		else
-		{
-			if (fn_checknl(stash))
-				buf = ft_strdup(stash);
-			splitlength = fn_splitlength(buf) + 1;
+			splitlength = fn_splitlength(stash) + 1;
 			//printf("splitlength = %d\n", splitlength);
 			//printf("buf = %s\n", buf);
-			if (!(line = (char *)malloc(sizeof(char) * (ft_strlen(stash) + splitlength + 1))))
+			if (!(line = (char *)malloc(sizeof(char) * (splitlength + 1))))
 				return (0);
-			ft_strlcpy(line, stash, ft_strlen(stash) + 1);
-			ft_strlcat(line, buf, ft_strlen(stash) + splitlength + 1);
+			ft_strlcpy(line, stash, splitlength);
 			//printf("line = %s\n", line);
 			//printf("stash before split = %s\n", stash);
-			free(stash);
-			stash = ft_substr(buf, splitlength, BUFFER_SIZE - splitlength + 1);
-			//printf("stash after join = %s\n", stash);
+			temp = &stash[splitlength];
+			stash = ft_strjoin(temp, buf);
 			return (line);
 		}
+		else if (!(fn_checknl(stash)))
+		{
+			//printf("stash_before = %s\n", stash);
+			temp = stash;
+			fn_freestr(stash);
+			stash = ft_strjoin(temp, buf);
+		}
 	}
-	free(buf);
+	fn_freestr(buf);
 //	free(line);
 	return (0);
 }

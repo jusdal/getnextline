@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
+/*   By: jdaly <jdaly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 00:55:49 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/08 17:45:17 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/10 19:02:39 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFFER_SIZE 5
+# define BUFFER_SIZE 10
 
 # include <unistd.h>
 # include <stddef.h>
