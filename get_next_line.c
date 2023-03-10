@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/11 02:19:59 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/11 02:47:54 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,13 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
-	if (!stash)
+	if (!stash) //condition if pointer is NULL
 	{
 		stash = malloc(sizeof(char) * 1);
 		stash[0] = '\0';
 	}
 	stash = readfd(fd, stash);
-	if (!stash[0])
+	if (stash[0] == '\0') //condition if string is empty
 	{
 		free(stash);
 		return (0);
