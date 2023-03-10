@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/10 22:15:02 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/11 01:14:04 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	fn_getlength(char *str)
 	free(str);
 	str = NULL;
 }*/
-char	*readfile(int fd, char *stash)
+char	*readfd(int fd, char *stash)
 {
 	char	*buf;
 	int		nread;
@@ -78,25 +78,37 @@ char	*createline(char *stash, int linelength)
 
 	if (stash == NULL)
 		return (0);
-	if (!(line = malloc(sizeof(char) * (fn_getlength(stash) + 1))))
+	if (!(line = malloc(sizeof(char) * (linelength + 1))))
 		return (0);
-	ft_strlcpy(line, stash, linelength);
-		return (line);
+	ft_strlcpy(line, stash, linelength + 1);
+	return (line);
 }
 
 char	*keep(char *stash, int linelength)
 {
 	char	*temp;
 
-	if (stash[linelength + 1] = '\0')
+	if (stash[linelength] == '\0')
 	{
 		free(stash);
-		return (0);
+		return (NULL);
 	}
 	if (!(temp = malloc(1)))
-		return (0);
+	{
+		free(temp);
+		return (NULL);
+	}
 	temp[0] = '\0';
-	ft_strlcpy(temp, &stash[linelength], ft_strlen(stash - linelength));
+	if (stash[linelength - 1] == '\n')
+	{
+		if (stash[linelength] == '\0')
+		{
+			free(stash);
+			return (NULL);
+		}
+		else
+			ft_strlcpy(temp, &stash[linelength], ft_strlen(stash) - linelength + 1);
+	}
 	free(stash);
 	return (temp);
 }
@@ -114,11 +126,11 @@ char	*get_next_line(int fd)
 		return (0);
 	if (!stash)
 	{
-		stash = malloc(1);
+		stash = malloc(sizeof(char) * 1);
 		stash[0] = '\0';
 	}
-	stash = readfile(fd, stash);
-	if (!stash[0])
+	stash = readfd(fd, stash);
+	if (!stash)
 	{
 		free(stash);
 		return (0);
