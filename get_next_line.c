@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/11 02:14:52 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/11 02:19:59 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ char	*readfd(int fd, char *stash)
 	char	*buf;
 	int		nread;
 
-	if (!(buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
 		return (0);
 	nread = 1;
 	while (nread > 0)
@@ -66,10 +67,10 @@ char	*readfd(int fd, char *stash)
 		buf[nread] = '\0';
 		stash = ft_strjoin(stash, buf);
 		if (fn_checknl(buf))
-			break;
+			break ;
 	}
 	free(buf);
-	return(stash);
+	return (stash);
 }
 
 char	*createline(char *stash, int linelength)
@@ -78,7 +79,8 @@ char	*createline(char *stash, int linelength)
 
 	if (stash == NULL)
 		return (0);
-	if (!(line = malloc(sizeof(char) * (linelength + 1))))
+	line = malloc(sizeof(char) * (linelength + 1));
+	if (!line)
 		return (0);
 	ft_strlcpy(line, stash, linelength + 1);
 	return (line);
@@ -99,11 +101,8 @@ char	*keep(char *stash, int linelength)
 char	*get_next_line(int fd)
 {
 	static char	*stash;
-	//char		*buf;
 	char		*line;
-	//char		*temp;
 	int			linelength;
-	//int			nread;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
@@ -162,7 +161,7 @@ char	*get_next_line(int fd)
 	return (0);
 }
 */
-int	main(void)
+/*int	main(void)
 {
 	int     fd;
     char	*line;
@@ -176,4 +175,4 @@ int	main(void)
 		line = get_next_line(fd);
 	}
 	close(fd);
-}
+}*/
