@@ -44,6 +44,9 @@ char	*readfd(int fd, char *stash)
 		if (nread < 0)
 		{
 			free(buf);
+			buf = NULL;
+			free(stash);
+			stash = NULL;
 			return (0);
 		}
 		buf[nread] = '\0';
@@ -102,9 +105,12 @@ char	*get_next_line(int fd)
 		stash[0] = '\0';
 	}
 	stash = readfd(fd, stash);
+	if (!stash)
+		return (0);
 	if (stash[0] == '\0') //condition if string is empty
 	{
-		free (stash);
+		free(stash);
+		stash = NULL;
 		return (0);
 	}
 	linelength = fn_getlength(stash) + 1;
@@ -119,16 +125,9 @@ char	*get_next_line(int fd)
     char	*line;
 	char	*line2;
 
-	fd = open("test.txt", O_RDONLY);
+	fd = open("empty.txt", O_RDONLY);
 	line = get_next_line(fd);
 	printf("%s\n", line);
 	line2 = get_next_line(fd);
 	printf("%s\n", line2);
-    while (line)
-	{
-		printf("%s\n",line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
 }*/
