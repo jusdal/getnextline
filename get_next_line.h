@@ -12,17 +12,19 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-//# define BUFFER_SIZE 5
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 5
+# endif
 
 # include <unistd.h>
 # include <stddef.h>
 # include <stdlib.h>
 # include <fcntl.h>
 
-
 char	*get_next_line(int fd);
-int	fn_checknl(char *str);
-int	fn_splitlength(char *str);
+int		fn_checknl(char *str);
+int		fn_getlength(char *str);
 char	*readfd(int fd, char *stash);
 char	*createline(char *stash, int linelength);
 char	*keep(char *stash, int linelength);
@@ -30,6 +32,5 @@ size_t	ft_strlen(const char *s);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 char	*ft_strjoin(char *s1, char *s2);
-
 
 #endif
