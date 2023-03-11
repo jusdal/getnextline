@@ -69,7 +69,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*str;
-	size_t	len;
+	int		len;
 
 	if (!s1 || !s2)
 		return (0);
@@ -81,4 +81,14 @@ char	*ft_strjoin(char *s1, char *s2)
 	ft_strlcat(str, s2, len + 1);
 	free(s1);
 	return (str);
+}
+
+int	fn_getlength(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\n' && str[i] != '\0')
+		i++;
+	return (i);
 }
