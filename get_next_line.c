@@ -6,11 +6,12 @@
 /*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/12 00:04:26 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/03/12 02:40:31 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int	fn_checknl(char *str)
 {
@@ -117,15 +118,18 @@ char	*get_next_line(int fd)
 	stash = keep(stash, linelength);
 	return (line);
 }
-/*int	main(void)
+
+int	main(void)
 {
 	int     fd;
     char	*line;
-	char	*line2;
-
-	fd = open("empty.txt", O_RDONLY);
+	fd = open("poem.txt", O_RDONLY);
 	line = get_next_line(fd);
-	printf("%s\n", line);
-	line2 = get_next_line(fd);
-	printf("%s\n", line2);
-}*/
+    while (line)
+	{
+		printf("%s\n",line);
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+}
