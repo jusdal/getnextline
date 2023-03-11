@@ -28,9 +28,9 @@ int		fn_getlength(char *str);
 char	*readfd(int fd, char *stash);
 char	*createline(char *stash, int linelength);
 char	*keep(char *stash, int linelength);
-size_t	ft_strlen(const char *s);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
+int		ft_strlen(const char *s);
+int		ft_strlcpy(char *dst, const char *src, int dstsize);
+int		ft_strlcat(char *dst, const char *src, int dstsize);
 char	*ft_strjoin(char *s1, char *s2);
 
 #endif
