@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 int	fn_checknl(char *str)
 {
@@ -99,7 +98,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
-	if (!stash) //condition if pointer is NULL
+	if (!stash)
 	{
 		stash = malloc(sizeof(char) * 1);
 		stash[0] = '\0';
@@ -107,7 +106,7 @@ char	*get_next_line(int fd)
 	stash = readfd(fd, stash);
 	if (!stash)
 		return (0);
-	if (stash[0] == '\0') //condition if string is empty
+	if (stash[0] == '\0')
 	{
 		free(stash);
 		stash = NULL;
@@ -118,7 +117,6 @@ char	*get_next_line(int fd)
 	stash = keep(stash, linelength);
 	return (line);
 }
-
 /*int	main(void)
 {
 	int     fd;
