@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/12 00:04:26 by jdaly            ###   ########.fr       */
+/*   Created: 2023/03/11 23:29:27 by jdaly             #+#    #+#             */
+/*   Updated: 2023/03/12 00:06:22 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	fn_checknl(char *str)
 {
@@ -92,40 +92,47 @@ char	*keep(char *stash, int linelength)
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[OPEN_MAX];
 	char		*line;
 	int			linelength;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (0);
-	if (!stash)
+	if (!stash[fd])
 	{
-		stash = malloc(sizeof(char) * 1);
-		stash[0] = '\0';
+		stash[fd] = malloc(sizeof(char) * 1);
+		stash[fd][0] = '\0';
 	}
-	stash = readfd(fd, stash);
-	if (!stash)
+	stash[fd] = readfd(fd, stash[fd]);
+	if (!stash[fd])
 		return (0);
-	if (stash[0] == '\0')
+	if (stash[fd][0] == '\0')
 	{
-		free(stash);
-		stash = NULL;
+		free(stash[fd]);
+		stash[fd] = NULL;
 		return (0);
 	}
-	linelength = fn_getlength(stash) + 1;
-	line = createline(stash, linelength);
-	stash = keep(stash, linelength);
+	linelength = fn_getlength(stash[fd]) + 1;
+	line = createline(stash[fd], linelength);
+	stash[fd] = keep(stash[fd], linelength);
 	return (line);
 }
-/*int	main(void)
+/*
+int	main(void)
 {
 	int     fd;
+	int		fd2;
     char	*line;
 	char	*line2;
 
-	fd = open("empty.txt", O_RDONLY);
+	fd = open("test2.txt", O_RDONLY);
+	fd2 = open("test.txt", O_RDONLY);
 	line = get_next_line(fd);
 	printf("%s\n", line);
 	line2 = get_next_line(fd);
+	printf("%s\n", line2);
+	line = get_next_line(fd2);
+	printf("%s\n", line);
+	line2 = get_next_line(fd2);
 	printf("%s\n", line2);
 }*/
