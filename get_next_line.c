@@ -6,7 +6,7 @@
 /*   By: jdaly <jdaly@student.42bangkok.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 22:28:45 by jdaly             #+#    #+#             */
-/*   Updated: 2023/03/12 02:40:31 by jdaly            ###   ########.fr       */
+/*   Updated: 2023/05/27 17:15:18 by jdaly            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int	main(void)
+/*int	main(void)
 {
 	int     fd;
     char	*line;
@@ -132,4 +132,4 @@ int	main(void)
 		line = get_next_line(fd);
 	}
 	close(fd);
-}
+}*/
